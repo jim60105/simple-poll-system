@@ -1,8 +1,22 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "baseUrl": "..",
     "module": "esnext",
+    "target": "esnext",
     "lib": ["esnext"],
-    "types": ["@cloudflare/workers-types"]
+    "alwaysStrict": true,
+    "strict": true,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "types": ["@cloudflare/workers-types"],
+    "paths": {
+      "@/*": ["src/*"],
+      "*": [
+        "node_modules/*",
+        "*"
+      ],
+    }
   }
 }

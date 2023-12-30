@@ -12,6 +12,8 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false"
   },
   "dependencies": {
+    "@cloudflare/pages-plugin-static-forms": "^1.0.1",
+    "chart.js": "^4.4.1",
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
     "primevue": "^3.45.0",

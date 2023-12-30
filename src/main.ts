@@ -14,6 +14,7 @@ import Button from 'primevue/button';
 import SelectButton from 'primevue/selectbutton';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
+import Chart from 'primevue/chart';
 
 const app = createApp(App);
 app.use(PrimeVue, {
@@ -24,5 +25,6 @@ app.component('Button', Button);
 app.component('SelectButton', SelectButton);
 app.component('Toast', Toast);
 app.use(ToastService);
+app.component('Chart', Chart);
 
 app.mount('#app');
