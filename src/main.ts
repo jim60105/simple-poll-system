@@ -4,7 +4,7 @@ import { createApp } from 'vue';
 import App from '@/App.vue';
 import PrimeVue from 'primevue/config';
 
-//theme
+// theme
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.scss';
@@ -16,6 +16,12 @@ import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Chart from 'primevue/chart';
 
+// components
+import Form from '@/components/form/Form.vue';
+import FormSelection from '@/components/form/FormSelection.vue';
+import Result from '@/components/result/Result.vue';
+import ResultChart from '@/components/result/ResultChart.vue';
+
 const app = createApp(App);
 app.use(PrimeVue, {
   ripple: true
@@ -26,5 +32,10 @@ app.component('SelectButton', SelectButton);
 app.component('Toast', Toast);
 app.use(ToastService);
 app.component('Chart', Chart);
+
+app.component('Form', Form);
+app.component('FormSelection', FormSelection);
+app.component('Result', Result);
+app.component('ResultChart', ResultChart);
 
 app.mount('#app');
