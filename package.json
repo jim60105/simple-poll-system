@@ -7,6 +7,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "build-only": "vite build",
     "dev": "vite --host",
+    "wrangler-dev": "wrangler pages dev --d1 SimplePollSystem=631aae6c-ace8-4d73-bc75-453abaad85fb -- vite --host",
     "format": "prettier --write src/",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false"
