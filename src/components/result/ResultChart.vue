@@ -9,15 +9,17 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { inject, onBeforeMount, onMounted, ref } from 'vue';
 import { ChartData } from 'chart.js';
 import { IItem } from '@/models/item';
+import { APIService } from '@/services/APIService';
 
 const primeChart = ref();
 
 const props = defineProps(['modelValue']);
 const item = ref<IItem>(props.modelValue);
 const chartType = ref(props.modelValue.result.chartType);
+const apiService = inject<APIService>('APIService')!;
 
 // const documentStyle = getComputedStyle(document.body);
 const chartData: ChartData = {
@@ -60,12 +62,9 @@ const setChartLabels = async (data: ChartData) => {
 };
 
 const setChartData = async (data: ChartData) => {
-  const response = await fetch(`/api/poll/Poll1/${item.value.id}?type=count`);
-  const res: { Value: string; Count: number }[] = (await response.json()).filter(
-    (p: { Value: string; Count: number }) => item.value.options.includes(p.Value)
-  );
+  var result = await apiService.getPollCount(item.value, 'Poll1');
   const result_ordered = item.value.options.map(
-    (x) => res.find((y) => y.Value === x) || { Value: x, Count: 0 }
+    (x) => result.find((y) => y.Value === x) || { Value: x, Count: 0 }
   );
   data.datasets[0].data = result_ordered.map((x) => x.Count);
 };
@@ -81,12 +80,15 @@ onBeforeMount(async () => {
 });
 
 onMounted(() => {
-  setInterval(async () => {
+  var intervalId = setInterval(async () => {
     const chart = primeChart.value?.chart;
     if (!chart) return;
 
     await setChartData(chart.data);
     chart.update();
+
+    // Clear after first run, for example
+    clearInterval(intervalId);
   }, 5000);
 });
 </script>

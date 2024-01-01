@@ -16,11 +16,13 @@
 import { IPoll } from '@/models/poll';
 import { useForm } from 'vee-validate';
 import { useToast } from 'primevue/usetoast';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
+import { APIService } from '@/services/APIService';
 
 const toast = useToast();
 const props = defineProps(['modelValue']);
 const items = ref(props.modelValue);
+const apiService = inject<APIService>('APIService')!;
 
 const { handleSubmit, resetForm } = useForm();
 
@@ -29,13 +31,7 @@ const onSubmit = handleSubmit(async (values) => {
     pollName: 'Poll1',
     pollItems: Object.entries(values).map((p: [string, string]) => [p[0], p[1]])
   };
-  await fetch('/api/poll/Poll1', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(poll)
-  });
+  await apiService.addPoll(poll);
   resetForm();
   toast.add({
     severity: 'success',

@@ -14,13 +14,17 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const url = new URL(context.request.url);
   const params = url.searchParams;
-  if (params.get('type') === 'count') {
-    return new Response(
-      JSON.stringify((await getGroupByAndCount(context.env, pollName, field)).results)
-    );
-  }
 
-  return new Response('Bad Request', { status: 400 });
+  switch (params.get('type')) {
+    case 'count':
+      return new Response(
+        JSON.stringify((await getGroupByAndCount(context.env, pollName, field)).results)
+      );
+    case 'list':
+      return new Response(JSON.stringify(await getAll(context.env, pollName)));
+    default:
+      return new Response('Bad Request', { status: 400 });
+  }
 };
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -49,3 +53,6 @@ const getGroupByAndCount = (env: Env, pollName: string, field: string) =>
   )
     .bind(field)
     .all();
+
+const getAll = (env: Env, pollName: string) =>
+  env.SimplePollSystem.prepare(`SELECT Id, Key, Value, Time FROM ${pollName}`).all();

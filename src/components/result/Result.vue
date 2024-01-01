@@ -5,6 +5,9 @@
       <ResultChart v-if="item.result.type === 'chart'" :modelValue="item"></ResultChart>
     </template>
   </div>
+  <div class="card flex justify-content-center">
+    <ResultList></ResultList>
+  </div>
 </template>
 
 <script setup lang="ts">
