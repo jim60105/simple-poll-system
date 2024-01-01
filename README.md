@@ -1,8 +1,10 @@
 # Simple Poll System
 
-This project serves as a proof of concept for learning purposes. Its objective is to create a real-time voting system that is both cost-effective and capable of handling large number of requests at the same time.
+Try it here 👉 <https://simple-poll-system.pages.dev>
 
-To achieve this, I built the solution with [Cloudflare Pages](https://developers.cloudflare.com/pages), [Page Functions](https://developers.cloudflare.com/pages/functions/), and [Cloudflare D1](https://developers.cloudflare.com/d1/).
+This project serves as a proof of concept for learning purposes. It is aiming to create a cost-efficient and high-capacity real-time poll system. Poll is just a simple topic, you can modify it to other applications that involve front-end, back-end, and database.
+
+To achieve this, I built the solution with [Cloudflare Pages](https://developers.cloudflare.com/pages), [Cloudflare Page Functions](https://developers.cloudflare.com/pages/functions/), and [Cloudflare D1](https://developers.cloudflare.com/d1/).
 
 Cloudflare handles the traffic of the webpage itself, and there are no charges for webpage traffic on Cloudflare Pages. [The primary limitation of Cloudflare Pages are the frequency of builds and file size](https://developers.cloudflare.com/pages/platform/limits/), both of which are unlikely to surpass the free quota during regular usage. I did not find any limitations in docs regarding the page carrying capacity; however, it is Cloudflare. I don't think they will encounter traffic bottlenecks on static webpage access.
 
@@ -10,12 +12,13 @@ Cloudflare handles the traffic of the webpage itself, and there are no charges f
 
 [Cloudflare D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/#billing-metrics) includes 100,000 free writes per day and 5 million free reads per day. The sufficiency of this allowance depends on the volume of requests and how you structure your table schema and system.
 
-When designing the system, it is crucial to consider the frequency of API access and the read/write operations on the databases, especially if the website experiences high traffic. It is worth noting that in this project's table design, each question response is stored as a row, which may result in excessive database operations when there are numerous questions. This design may not be ideal for the pricing structure mentioned. However, it is important to remember that this is just a quick POC project and modifications should be made for production purposes.
+When designing the system, it is crucial to consider the frequency of API access and the read/write operations on the databases, especially if the website experiences high traffic.
+
+> It is worth noting that each question response is stored as a row in this project's table design, which may result in redundant database operations when there are numerous questions. This design may not be ideal for the pricing structure mentioned. However, this is just a quick POC project and modifications should be made for production purposes.
 
 > [!Important]
 > It is important to note that _D1 is currently in public beta_.  
 > It is not advisable to utilize beta products for large production workloads.  
-> If you find yourself in this scenario, please choose to use the upstream KV solution.  
 > Also, please star🌟 and watch👀 this repo to stay updated with our future modifications.
 
 ## Setup
@@ -40,9 +43,6 @@ Create a new D1 Database and obtain the `database_id` from the execution result 
 
 #### Step 1: Create a new D1 Database
 
-> [!IMPORTANT]  
-> Execute the following command in your working directory.
-
 Create a new D1 Database with the name `simple-poll-system`.
 
 ```bash
@@ -65,12 +65,9 @@ database_id = "631aae6c-ace8-4d73-bc75-453abaad85fb"
 #### Step 2: Update database_id
 
 > [!NOTE]
-> This is actually only used in locally debugging since we used the Git provider to deploy our code.
+> This step is actually only used in locally debugging, since we used the Git provider to deploy our code.
 
 Fill the `database_id` property in `wrangler.toml` with the id you got in the previous step.
-
-> [!IMPORTANT]  
-> `binding` must be `SimplePollSystem` for our code to work.
 
 ```toml
 [[d1_databases]]
@@ -89,18 +86,55 @@ Change the `wrangler-dev` npm script in `package.json`:
 
 Create a table named `Poll1` in db named `simple-poll-system` with `init_database.sql`
 
+> [!IMPORTANT]  
+> Execute the following command in your working directory.
+
 ```bash
 wrangler d1 execute simple-poll-system --file=./init_database.sql
+```
+
+Success response for example:
+
+```bash
+🌀 Mapping SQL input into an array of statements
+🌀 Parsing 3 statements
+🌀 Executing on remote database simple-poll-system (631aae6c-ace8-4d73-bc75-453abaad85fb):
+🌀 To execute on your local development database, pass the --local flag to 'wrangler d1 execute'
+🚣 Executed 3 commands in 0.6084ms
 ```
 
 > [!NOTE]  
 > I hardcoded the table name in the code for this simple POC project.  
 > You can perform a project-wide search for `Poll1` and replace it with your desired table name. Alternatively, you can extract it to a variable.
 
-## Bind your D1 Database to your Cloudflare Pages
+### Bind your D1 Database to your Cloudflare Pages
 
 Go to your Cloudflare Pages project settings → Functions → D1 database bindings, and bind the `simple-poll-system` database to your page.
 
-## Deploy
+- Variable name: `SimplePollSystem`
+- D1 database: `simple-poll-system`
+
+![2024-01-03 00 30 42](https://github.com/jim60105/simple-poll-system/assets/16995691/bfa70cd7-87ae-48a8-a99d-ac7b70a680c3)
+
+> [!IMPORTANT]  
+> Bindings will work on the next build. So we need to trigger a new build to make it work.
+
+### Deploy
 
 Save the file and push a new commit into `master` and wait for the Cloudflare Page to deploy your webpage.
+
+Confirm that things can work, and then dive into the code to see how it works!
+
+![2024-01-03 00 32 54](https://github.com/jim60105/simple-poll-system/assets/16995691/cd870e27-1191-4718-b905-b20b6168d32b)
+
+## LICENSE
+
+<img src="https://github.com/jim60105/simple-poll-system/assets/16995691/72ee6dc7-c41e-4b1d-a839-5c2ff8a48799" alt="agpl" width="300" />
+
+[GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE)
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
