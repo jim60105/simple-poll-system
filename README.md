@@ -103,6 +103,12 @@ Success response for example:
 🚣 Executed 3 commands in 0.6084ms
 ```
 
+You may also want to create the table in your local development environment:
+
+```bash
+wrangler d1 execute simple-poll-system --local --file=./init_database.sql
+```
+
 > [!NOTE]  
 > I hardcoded the table name in the code for this simple POC project.  
 > You can perform a project-wide search for `Poll1` and replace it with your desired table name. Alternatively, you can extract it to a variable.
